@@ -1,0 +1,22 @@
+<!-- Задание №7
+Доработаем задачу 8 из прошлого семинара про клиентов,
+товары и заказы.
+Создайте шаблон для вывода всех заказов клиента и
+списком товаров внутри каждого заказа.
+Подготовьте необходимый маршрут и представление. -->
+
+{% extends 'hw_app/base.html' %}
+
+{% block title %}Products in order number{{ order.pk }}{% endblock %}
+
+{% block content %}
+<h2>Products in order number {{ order.pk }}</h2>
+<table>
+    {% for product in products %}
+    <tr>
+        <td>{{ product }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

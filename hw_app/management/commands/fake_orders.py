@@ -27,8 +27,6 @@ class Command(BaseCommand):
             for _ in range(randint(1, 5)):
                 products_in_order.add(products[randint(0, products_variety-1)])
             total_price = sum([product.price for product in products_in_order])
-            print(products_in_order)
-            print(total_price)
 
             order = Order(customer=clients[randint(0, clients_variety-1)],
                           total_price=total_price, order_date=datetime.date.today())

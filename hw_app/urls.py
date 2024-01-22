@@ -8,5 +8,8 @@ urlpatterns = [
     path('get_product/<int:pk>', views.get_product, name='get_product'),
     path('get_client/<int:pk>', views.get_client, name='get_client'),
     path('get_order/<int:pk>', views.get_order, name='get_order'),
+    path('get_clients_orders/<int:pk>', views.get_all_clients_orders, name='get_clients_orders'),
+    path('get_order_products/<int:pk>', views.get_all_order_products, name='get_order_products'),
+    path('get_all_client_products/<int:client_id>/<int:days_num>', views.get_all_client_products, name='get_all_client_products'),
 
 ]
