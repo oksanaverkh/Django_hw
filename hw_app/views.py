@@ -2,11 +2,15 @@ from django.shortcuts import render
 from django.http import HttpResponse
 import logging
 from . models import Client, Product, Order
+from django.core.files.storage import FileSystemStorage
+from . forms import ImageForm, ProductEditForm
 import datetime
 import pytz
 
 utc = pytz.UTC
 logger = logging.getLogger(__name__)
+
+# Homework 1
 
 
 def index(request):
@@ -33,6 +37,8 @@ def about(request):
 """
     return HttpResponse(html)
 
+# Homework 2
+
 
 def get_all_products(request):
     logger.info('Page with all products list accessed')
@@ -52,14 +58,15 @@ def get_all_products(request):
 def get_product(request, pk):
     logger.info('Page about selected product accessed')
     product = Product.objects.filter(pk=int(pk)).first()
-    html = f"""
-    <body bgcolor="LightCyan">
-        <h1>Selected product</h1>
-        { product }
-    </body>
-    """
+    # html = f"""
+    # <body bgcolor="LightCyan">
+    #     <h1>Selected product</h1>
+    #     { product }
+    # </body>
+    # """
 
-    return (HttpResponse(html))
+    # return (HttpResponse(html))
+    return render(request, template_name='hw_app/product_card.html', context={'product': product})
 
 
 def get_client(request, pk):
@@ -89,6 +96,7 @@ def get_order(request, pk):
 
     return (HttpResponse(html))
 
+# Homework 3
 # Задание №7
 # Доработаем задачу 8 из прошлого семинара про клиентов, товары и заказы.
 # Создайте шаблон для вывода всех заказов клиента и
@@ -138,3 +146,60 @@ def get_all_client_products(request, client_id, days_num):
     logger.info("Page about products ever ordered accessed")
     return render(request, template_name='hw_app/all_client_products.html',
                   context={'client': client, 'total_products_list': total_products_list, 'days_num': days_num, 'start_time': start_time})
+
+# Homework 4
+# Задание №6
+# Доработаем задачу про клиентов, заказы и товары из
+# прошлого семинара.
+# Создайте форму для редактирования товаров в базе данных.
+
+
+def update_product(request):
+    if request.method == 'POST':
+        form = ProductEditForm(request.POST)
+        message = 'Data error'
+        if form.is_valid():
+            product = form.cleaned_data['product']
+            prod_name = product.name
+            product_to_edit = Product.objects.filter(name=prod_name).first()
+
+            name = form.cleaned_data['name']
+            description = form.cleaned_data['description']
+            price = form.cleaned_data['price']
+            quantity = form.cleaned_data['quantity']
+
+            product_to_edit.name = name
+            product_to_edit.description = description
+            product_to_edit.price = price
+            product_to_edit.quantity = quantity
+
+            product_to_edit.save()
+            message = 'Product updated'
+            logger.info(f"Product {product_to_edit} updated")
+
+    else:
+        form = ProductEditForm()
+        message = 'Fill the form'
+        logger.info("Page about updating product accessed")
+
+    return render(request, 'hw_app/update_product.html', {'form': form, 'message': message})
+
+
+# Задание
+# Измените модель продукта, добавьте поле для хранения фотографии продукта.
+# Создайте форму, которая позволит сохранять фото.
+def upload_image(request, product_id):
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            product = Product.objects.filter(pk=product_id).first()
+            image = form.cleaned_data['image']
+            fs = FileSystemStorage()
+
+            product.image_field = fs.save(image.name, image)
+            product.save()
+            logger.info("Image saved")
+    else:
+        form = ImageForm()
+        logger.info("Page about uploading image accessed")
+    return render(request, 'hw_app/upload_image.html', {'form': form})

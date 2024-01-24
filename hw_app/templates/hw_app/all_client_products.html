@@ -1,13 +1,3 @@
-<!-- Домашнее задание
-Продолжаем работать с товарами и заказами.
-Создайте шаблон, который выводит список заказанных
-клиентом товаров из всех его заказов с сортировкой по
-времени:
-○ за последние 7 дней (неделю)
-○ за последние 30 дней (месяц)
-○ за последние 365 дней (год)
-*Товары в списке не должны повторятся. -->
-
 {% extends 'hw_app/base.html' %}
 
 {% block title %}Products ordered{% endblock %}
@@ -20,7 +10,7 @@
         <th style="width:250px; text-align:left">Product name</th>
         <th style="width:200px; text-align:left">Product price</th>
     <tr>
-    {% for product in total_products_list %}
+        {% for product in total_products_list %}
         <td>{{ product.pk }}</td>
         <td>{{ product.name }}</td>
         <td>{{ product.price }}</td>

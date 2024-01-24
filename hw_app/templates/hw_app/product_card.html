@@ -1,0 +1,31 @@
+{% extends 'hw_app/base.html' %}
+
+{% block title %}Info about product{% endblock %}
+
+{% block content %}
+
+<body style="background-color:LightCyan">
+    <h2>Info about product {{ product.name }}</h2>
+    <table>
+        <tr>
+            <th style="width:100px; text-align:left">Product id</th>
+            <th style="width:300px; text-align:left">Name</th>
+            <th style="width:300px; text-align:left">Description</th>
+            <th style="width:160px; text-align:left">Available quantity</th>
+            <th style="width:160px; text-align:left">Price</th>
+            <th style="width:300px; text-align:left">Receipt date</th>
+            <th style="width:1600px; text-align:left">Photo</th>
+        </tr>
+
+        <tr>
+            <td>{{ product.pk }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.receipt_date }}</td>
+            <td>{{ product.image_field }}</td>
+        </tr>
+    </table>
+</body>
+{% endblock %}
